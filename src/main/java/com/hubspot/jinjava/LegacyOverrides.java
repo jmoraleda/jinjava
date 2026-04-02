@@ -21,6 +21,7 @@ public interface LegacyOverrides extends WithLegacyOverrides {
     .withAllowAdjacentTextNodes(true)
     .withUseTrimmingForNotesAndExpressions(true)
     .withKeepNullableLoopValues(true)
+    .withHandleBackslashInQuotesOnly(true)
     .build();
   LegacyOverrides ALL = new Builder()
     .withEvaluateMapKeys(true)

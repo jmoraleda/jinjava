@@ -27,21 +27,16 @@ public class BackslashHandlingTest {
     return new Jinjava(
       JinjavaConfig
         .newBuilder()
-        .withLegacyOverrides(LegacyOverrides.newBuilder().build())
+        .withLegacyOverrides(
+          LegacyOverrides.newBuilder().withHandleBackslashInQuotesOnly(false).build()
+        )
         .build()
     );
   }
 
   /** Char-based scanner, Jinja2-compatible backslash behaviour (flag = true). */
   private static Jinjava charNew() {
-    return new Jinjava(
-      JinjavaConfig
-        .newBuilder()
-        .withLegacyOverrides(
-          LegacyOverrides.newBuilder().withHandleBackslashInQuotesOnly(true).build()
-        )
-        .build()
-    );
+    return new Jinjava(JinjavaConfig.newBuilder().build());
   }
 
   /** String-based scanner, legacy backslash behaviour (flag = false). */
@@ -50,7 +45,9 @@ public class BackslashHandlingTest {
       JinjavaConfig
         .newBuilder()
         .withTokenScannerSymbols(StringTokenScannerSymbols.builder().build())
-        .withLegacyOverrides(LegacyOverrides.newBuilder().build())
+        .withLegacyOverrides(
+          LegacyOverrides.newBuilder().withHandleBackslashInQuotesOnly(false).build()
+        )
         .build()
     );
   }
@@ -61,9 +58,6 @@ public class BackslashHandlingTest {
       JinjavaConfig
         .newBuilder()
         .withTokenScannerSymbols(StringTokenScannerSymbols.builder().build())
-        .withLegacyOverrides(
-          LegacyOverrides.newBuilder().withHandleBackslashInQuotesOnly(true).build()
-        )
         .build()
     );
   }
@@ -216,10 +210,6 @@ public class BackslashHandlingTest {
 
   // ── LegacyOverrides preset assertions ─────────────────────────────────────
   //
-  // handleBackslashInQuotesOnly is an explicit opt-in only. It is NOT included
-  // in THREE_POINT_0 or NONE because existing templates may rely on the legacy
-  // behaviour of \} preventing delimiter recognition. Inclusion in a preset
-  // can be reconsidered in a future major version.
 
   @Test
   public void allPresetDoesNotEnableNewBackslashHandling() {
@@ -228,7 +218,7 @@ public class BackslashHandlingTest {
 
   @Test
   public void threePointZeroPresetDoesNotEnableNewBackslashHandling() {
-    assertThat(LegacyOverrides.THREE_POINT_0.isHandleBackslashInQuotesOnly()).isFalse();
+    assertThat(LegacyOverrides.THREE_POINT_0.isHandleBackslashInQuotesOnly()).isTrue();
   }
 
   @Test
